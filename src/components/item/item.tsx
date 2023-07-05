@@ -24,8 +24,7 @@ import {
 
 import { IItem } from "./item.type";
 import Hover from "../hover";
-import { DeleteIcon, DoneIcon, SettingIcon, UpdateIcon } from "../icons";
-import { WarningIcon } from "../icons";
+import { DeleteIcon, DoneIcon, SettingIcon, UpdateIcon, WarningIcon } from "../icons";
 import Progress from "../progress";
 
 const Item = ({ item }: { item: IItem }) => {

@@ -6,6 +6,7 @@ import { Navigate, useRoutes } from "react-router-dom";
 import WrapperRouteComponent from "./config";
 
 const Home = React.lazy(() => import("@/pages/home"));
+const Login = React.lazy(() => import("@/pages/login"));
 
 const routeList: RouteObject[] = [
   {
@@ -18,6 +19,10 @@ const routeList: RouteObject[] = [
       {
         path: "",
         element: <WrapperRouteComponent element={<Home />} titleId="Home" />,
+      },
+      {
+        path: "login",
+        element: <WrapperRouteComponent element={<Login />} titleId="Login" />,
       },
       // {
       //   path: "/login",
