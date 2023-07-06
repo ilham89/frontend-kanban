@@ -12,7 +12,7 @@ export const authServices = {
   },
   postSignup: async (data: ISignup): Promise<ISuccessSignup> => {
     const response = await axiosInstance({
-      url: "/auth/login",
+      url: "/auth/signup",
       method: "post",
       data,
     });

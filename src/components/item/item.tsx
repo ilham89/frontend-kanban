@@ -22,10 +22,10 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 
-import { IItem } from "./item.type";
 import Hover from "../hover";
 import { DeleteIcon, DoneIcon, SettingIcon, UpdateIcon, WarningIcon } from "../icons";
 import Progress from "../progress";
+import { IItem } from "@/services/items/items.types";
 
 const Item = ({ item }: { item: IItem }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -61,7 +61,7 @@ const Item = ({ item }: { item: IItem }) => {
         </Text>
         <HStack spacing="3" width="full">
           <Progress completed={item.progress_percentage ?? 0} />
-          {item.done ? (
+          {item.progress_percentage === 100 ? (
             <DoneIcon />
           ) : (
             <Text w="20" fontSize="xs" fontWeight="normal" color="#757575">

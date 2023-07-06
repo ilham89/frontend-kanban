@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   HStack,
+  Heading,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -15,7 +16,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 
-import { ITodo } from "./todo.type";
+import { ITodo } from "./todo.types";
 import { AddIcon } from "../icons";
 import Item from "../item";
 
@@ -31,9 +32,11 @@ const Todo = ({ title, description, items }: ITodo) => {
         <Text fontWeight="bold" fontSize="xs" color="#404040">
           {description}
         </Text>
-        {items.map((item) => (
+        {items?.map((item: any) => (
           <Item key={item.id} item={item} />
         ))}
+
+        {items.length === 0 && <Heading>No Items Found</Heading>}
         <HStack cursor="pointer" spacing="1" onClick={onOpen}>
           <AddIcon />
           <Text color="#1D1F20" fontSize="xs" fontWeight="normal">
