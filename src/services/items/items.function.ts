@@ -1,7 +1,7 @@
 import { useMutation, useQueries } from "@tanstack/react-query";
 
 import { itemServices } from "./items.api";
-import { IParamsDeleteItem } from "./items.types";
+import { IParamsCreateItem, IParamsDeleteItem } from "./items.types";
 import { ITodo } from "../todos/todos.types";
 import { queryClient } from "@/helpers/query-client";
 
@@ -16,10 +16,16 @@ export const useQueryItems = (todos?: ITodo[]) =>
       }) || [],
   });
 
-export const useMutationDeleteItem = () => {
-  return useMutation(({ todoId, id }: IParamsDeleteItem) => itemServices.deleteItem(todoId, id), {
+export const useMutationDeleteItem = () =>
+  useMutation(({ todoId, id }: IParamsDeleteItem) => itemServices.deleteItem(todoId, id), {
     onSuccess: (_, { todoId }) => {
       queryClient.invalidateQueries(["items", todoId]);
     },
   });
-};
+
+export const useMutationCreateItem = () =>
+  useMutation((params: IParamsCreateItem) => itemServices.createItem(params.todoId, params.todo), {
+    onSuccess: (_, { todoId }) => {
+      queryClient.invalidateQueries(["items", todoId]);
+    },
+  });

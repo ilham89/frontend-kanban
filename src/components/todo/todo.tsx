@@ -1,7 +1,13 @@
 import {
   Box,
   Button,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
   HStack,
+  Input,
+  InputGroup,
+  InputRightAddon,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -12,15 +18,15 @@ import {
   Tag,
   Text,
   VStack,
-  useDisclosure,
 } from "@chakra-ui/react";
 
 import { ITodo } from "./todo.types";
+import { useAction } from "./useAction";
 import { AddIcon } from "../icons";
 import Item from "../item";
 
-const Todo = ({ title, description, items }: ITodo) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+const Todo = ({ title, description, items, id }: ITodo) => {
+  const { isOpen, onOpen, onClose, isLoading, formik } = useAction(id);
 
   return (
     <Box border="1px solid" borderColor="primary.500" borderRadius="base" p="4" bg="surface.500">
@@ -31,10 +37,9 @@ const Todo = ({ title, description, items }: ITodo) => {
         <Text fontWeight="bold" fontSize="xs" color="#404040">
           {description}
         </Text>
-        {items?.map((item: any) => (
+        {items?.map((item) => (
           <Item key={item.id} item={item} />
         ))}
-
         {items.length === 0 && (
           <Box
             py="2"
@@ -62,14 +67,56 @@ const Todo = ({ title, description, items }: ITodo) => {
         <ModalContent>
           <ModalHeader>Create Task</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>Ko </ModalBody>
-
-          <ModalFooter>
-            <Button variant="ghost" mr={3} onClick={onClose}>
-              Cancel
-            </Button>
-            <Button colorScheme="primary">Save Task</Button>
-          </ModalFooter>
+          <form onSubmit={formik.handleSubmit}>
+            <ModalBody>
+              <VStack spacing="4" align="start">
+                <FormControl isInvalid={!!formik.errors.name}>
+                  <FormLabel>Task Name</FormLabel>
+                  <Input
+                    name="name"
+                    placeholder="Type your Task"
+                    focusBorderColor="primary.500"
+                    borderRadius="lg"
+                    border="2px solid"
+                    borderColor="#E0E0E0"
+                    onChange={formik.handleChange}
+                  />
+                  <FormErrorMessage>{formik.errors.name}</FormErrorMessage>
+                </FormControl>
+                <FormControl isInvalid={!!formik.errors.progress_percentage}>
+                  <FormLabel>Progress</FormLabel>
+                  <InputGroup>
+                    <Input
+                      name="progress_percentage"
+                      placeholder="70"
+                      focusBorderColor="primary.500"
+                      borderRadius="lg"
+                      border="2px solid"
+                      borderColor="#E0E0E0"
+                      type="number"
+                      w="25"
+                      onChange={formik.handleChange}
+                    />
+                    <InputRightAddon>%</InputRightAddon>
+                  </InputGroup>
+                  <FormErrorMessage>{formik.errors.progress_percentage}</FormErrorMessage>
+                </FormControl>
+              </VStack>
+            </ModalBody>
+            <ModalFooter>
+              <Button variant="ghost" mr={3} onClick={onClose}>
+                Cancel
+              </Button>
+              <Button
+                colorScheme="primary"
+                type="submit"
+                loadingText="Loading..."
+                isLoading={isLoading}
+              >
+                Save Task
+              </Button>
+            </ModalFooter>
+          </form>
         </ModalContent>
       </Modal>
     </Box>

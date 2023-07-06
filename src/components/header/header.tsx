@@ -51,9 +51,7 @@ const Header = () => {
             <ModalBody>
               <VStack spacing="4" align="start">
                 <FormControl isInvalid={!!formik.errors.title}>
-                  <FormLabel fontSize="xs" fontWeight="normal" color="#404040">
-                    Title
-                  </FormLabel>
+                  <FormLabel>Title</FormLabel>
                   <Input
                     name="title"
                     placeholder="Title"
@@ -66,9 +64,7 @@ const Header = () => {
                   <FormErrorMessage>{formik.errors.title}</FormErrorMessage>
                 </FormControl>
                 <FormControl isInvalid={!!formik.errors.description}>
-                  <FormLabel fontSize="xs" fontWeight="normal" color="#404040">
-                    Description
-                  </FormLabel>
+                  <FormLabel>Description</FormLabel>
                   <Textarea
                     name="description"
                     placeholder="Description"

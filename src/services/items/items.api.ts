@@ -18,4 +18,12 @@ export const itemServices = {
     });
     return response.data;
   },
+  createItem: async (todoId: number, data: Pick<IItem, "name" | "progress_percentage">) => {
+    const response = await axiosInstance({
+      url: `/todos/${todoId}/items`,
+      method: "post",
+      data,
+    });
+    return response.data;
+  },
 };

@@ -2,24 +2,28 @@ import { useDisclosure } from "@chakra-ui/react";
 import { useFormik } from "formik";
 
 import useNotification from "@/hooks/useNotification";
-import { CreateTodoSchema } from "@/schema/todos";
-import { useMutationCreateTodo } from "@/services/todos/todos.function";
+import { CreateItemSchema } from "@/schema/items";
+import { useMutationCreateItem } from "@/services/items/items.function";
 
-export const useAction = () => {
+export const useAction = (id: number) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const { mutate, isLoading } = useMutationCreateTodo();
+  const { mutate, isLoading } = useMutationCreateItem();
   const { addError, addSuccess } = useNotification();
 
   const formik = useFormik({
     initialValues: {
-      title: "",
-      description: "",
+      name: "",
+      progress_percentage: "",
     },
     onSubmit: (values) => {
-      mutate(values, {
+      const params = {
+        todoId: id,
+        todo: values,
+      };
+      mutate(params, {
         onSuccess: () => {
-          addSuccess("Successfully create new group!");
+          addSuccess("Successfully create item!");
           onClose();
         },
         onError: () => {
@@ -27,14 +31,14 @@ export const useAction = () => {
         },
       });
     },
-    validationSchema: CreateTodoSchema,
+    validationSchema: CreateItemSchema,
   });
 
   return {
     isOpen,
     onOpen,
     onClose,
-    formik,
     isLoading,
+    formik,
   };
 };

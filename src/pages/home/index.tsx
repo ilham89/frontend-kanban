@@ -22,6 +22,7 @@ const Home = () => {
           {todos?.map((todo, index) => (
             <Todo
               key={todo.id}
+              id={todo.id}
               title={todo.title}
               description={todo.description}
               items={todoItemsQueries[index].data || []}
