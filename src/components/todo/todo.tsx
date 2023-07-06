@@ -2,7 +2,6 @@ import {
   Box,
   Button,
   HStack,
-  Heading,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -36,7 +35,20 @@ const Todo = ({ title, description, items }: ITodo) => {
           <Item key={item.id} item={item} />
         ))}
 
-        {items.length === 0 && <Heading>No Items Found</Heading>}
+        {items.length === 0 && (
+          <Box
+            py="2"
+            px="4"
+            border="1px solid #E0E0E0"
+            bg="#FAFAFA"
+            borderRadius="base"
+            width="full"
+          >
+            <Text fontWeight="normal" fontSize="sm" color="#757575">
+              No Task
+            </Text>
+          </Box>
+        )}
         <HStack cursor="pointer" spacing="1" onClick={onOpen}>
           <AddIcon />
           <Text color="#1D1F20" fontSize="xs" fontWeight="normal">

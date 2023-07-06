@@ -25,10 +25,22 @@ import {
 import Hover from "../hover";
 import { DeleteIcon, DoneIcon, SettingIcon, UpdateIcon, WarningIcon } from "../icons";
 import Progress from "../progress";
+import { useMutationDeleteItem } from "@/services/items/items.function";
 import { IItem } from "@/services/items/items.types";
 
 const Item = ({ item }: { item: IItem }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { mutate, isLoading } = useMutationDeleteItem();
+
+  const confirmDelete = () => {
+    const params = {
+      todoId: item.todo_id,
+      id: item.id,
+    };
+    mutate(params, {
+      onSuccess: () => onClose(),
+    });
+  };
 
   const actions = [
     {
@@ -54,10 +66,10 @@ const Item = ({ item }: { item: IItem }) => {
   ] as const;
 
   return (
-    <Box p="4" border="1px solid #E0E0E0" bg="#FAFAFA" borderRadius="base">
+    <Box p="4" border="1px solid #E0E0E0" bg="#FAFAFA" borderRadius="base" width="full">
       <VStack align="flex-start" divider={<Divider variant="dashed" color="#E0E0E0" />}>
         <Text fontWeight="bold" color="#404040" fontSize="sm">
-          Re-designed the zero-g doggie bags. No more spills!
+          {item.name}
         </Text>
         <HStack spacing="3" width="full">
           <Progress completed={item.progress_percentage ?? 0} />
@@ -126,13 +138,24 @@ const Item = ({ item }: { item: IItem }) => {
             </HStack>
           </ModalHeader>
           <ModalCloseButton />
-          <ModalBody>Ko </ModalBody>
+          <ModalBody>
+            <Text fontWeight="normal" fontSize="sm" color="#404040">
+              Are you sure want to delete this task? your action can’t be reverted.
+            </Text>
+          </ModalBody>
 
           <ModalFooter>
             <Button variant="ghost" mr={3} onClick={onClose}>
               Cancel
             </Button>
-            <Button colorScheme="red">Delete</Button>
+            <Button
+              colorScheme="red"
+              onClick={confirmDelete}
+              loadingText="Loading..."
+              isLoading={isLoading}
+            >
+              Delete
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

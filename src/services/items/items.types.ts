@@ -7,3 +7,8 @@ export interface IItem {
   updated_at: string;
   progress_percentage: number | null;
 }
+
+export interface IParamsDeleteItem {
+  todoId: number;
+  id: number;
+}
