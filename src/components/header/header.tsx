@@ -16,38 +16,12 @@ import {
   ModalOverlay,
   Textarea,
   VStack,
-  useDisclosure,
 } from "@chakra-ui/react";
-import { useFormik } from "formik";
 
-import useNotification from "@/hooks/useNotification";
-import { TodoSchema } from "@/schema/todos";
-import { useMutationCreateTodo } from "@/services/todos/todos.function";
+import { useAction } from "./useAction";
 
 const Header = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
-  const { mutate, isLoading } = useMutationCreateTodo();
-  const { addError, addSuccess } = useNotification();
-
-  const formik = useFormik({
-    initialValues: {
-      title: "",
-      description: "",
-    },
-    onSubmit: (values) => {
-      mutate(values, {
-        onSuccess: () => {
-          addSuccess("Successfully create new group!");
-          onClose();
-        },
-        onError: () => {
-          addError("Something went wrong");
-        },
-      });
-    },
-    validationSchema: TodoSchema,
-  });
+  const { isOpen, onOpen, onClose, formik, isLoading } = useAction();
 
   return (
     <Box p="6" borderBottom="1px solid #E0E0E0">
