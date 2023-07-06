@@ -1,21 +1,12 @@
-import * as React from "react";
-
 import { Button, Center, Heading, VStack } from "@chakra-ui/react";
-import type { RouteProps } from "react-router";
 import { useNavigate } from "react-router-dom";
 
-import { windowLocalStorage } from "@/helpers/window";
-
-const PrivateRoute: React.FC<RouteProps> = ({ element }) => {
+const NotFound = () => {
   const navigate = useNavigate();
-
-  const logged = !!windowLocalStorage("get", "auth-token");
-  return logged ? (
-    (element as React.ReactElement)
-  ) : (
+  return (
     <Center minH="100vh">
       <VStack spacing="4">
-        <Heading>Please sign in to continue. The user is not authenticated.</Heading>
+        <Heading>The requested page does not exist. Please check the URL.</Heading>
         <Button
           colorScheme="primary"
           onClick={() =>
@@ -31,4 +22,4 @@ const PrivateRoute: React.FC<RouteProps> = ({ element }) => {
   );
 };
 
-export default PrivateRoute;
+export default NotFound;

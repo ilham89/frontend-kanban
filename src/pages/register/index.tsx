@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   Card,
   CardBody,
@@ -8,19 +7,18 @@ import {
   FormControl,
   FormErrorMessage,
   FormLabel,
+  HStack,
   Input,
   InputGroup,
   InputRightElement,
-  Link,
   Text,
   VStack,
 } from "@chakra-ui/react";
 
 import { useAction } from "./useAction";
 
-const Login = () => {
-  const { handleClick, formik, isLoading, show } = useAction();
-
+const Register = () => {
+  const { handleClick, formik, isLoading, show, navigate } = useAction();
   return (
     <Center minH="100vh">
       <Card>
@@ -32,6 +30,19 @@ const Login = () => {
         <CardBody>
           <form onSubmit={formik.handleSubmit}>
             <VStack spacing="4" align="start">
+              <FormControl isInvalid={!!formik.errors.name}>
+                <FormLabel>Name</FormLabel>
+                <Input
+                  name="name"
+                  placeholder="Name"
+                  onChange={formik.handleChange}
+                  focusBorderColor="primary.500"
+                  borderRadius="lg"
+                  border="2px solid"
+                  borderColor="#E0E0E0"
+                />
+                <FormErrorMessage>{formik.errors.name}</FormErrorMessage>
+              </FormControl>
               <FormControl isInvalid={!!formik.errors.email}>
                 <FormLabel>Email</FormLabel>
                 <Input
@@ -67,10 +78,30 @@ const Login = () => {
                 </InputGroup>
                 <FormErrorMessage>{formik.errors.password}</FormErrorMessage>
               </FormControl>
-              <Box justifyContent="space-between" alignItems="end" width="full" display="flex">
-                <Link href="/v1/register">Register here</Link>
+              <FormControl isInvalid={!!formik.errors.password_confirmation}>
+                <FormLabel>Password Confirmation</FormLabel>
+                <Input
+                  pr="4.5rem"
+                  type={show ? "text" : "password"}
+                  placeholder="Enter password"
+                  name="password_confirmation"
+                  onChange={formik.handleChange}
+                  focusBorderColor="primary.500"
+                  borderRadius="lg"
+                  border="2px solid"
+                  borderColor="#E0E0E0"
+                />
+                <FormErrorMessage>{formik.errors.password_confirmation}</FormErrorMessage>
+              </FormControl>
+              <HStack spacing="2" mt={4} justifyContent="flex-end" w="100%">
                 <Button
-                  mt={4}
+                  colorScheme="primary"
+                  variant="outline"
+                  onClick={() => navigate("/v1/login")}
+                >
+                  Back Login
+                </Button>
+                <Button
                   colorScheme="primary"
                   loadingText="Submitting ..."
                   isLoading={isLoading}
@@ -78,7 +109,7 @@ const Login = () => {
                 >
                   Submit
                 </Button>
-              </Box>
+              </HStack>
             </VStack>
           </form>
         </CardBody>
@@ -87,4 +118,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;

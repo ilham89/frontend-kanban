@@ -7,6 +7,8 @@ import WrapperRouteComponent from "./config";
 
 const Home = React.lazy(() => import("@/pages/home"));
 const Login = React.lazy(() => import("@/pages/login"));
+const Register = React.lazy(() => import("@/pages/register"));
+const NotFound = React.lazy(() => import("@/pages/not-found"));
 
 const routeList: RouteObject[] = [
   {
@@ -18,21 +20,20 @@ const routeList: RouteObject[] = [
     children: [
       {
         path: "",
-        element: <WrapperRouteComponent element={<Home />} titleId="Home" />,
+        element: <WrapperRouteComponent element={<Home />} titleId="Home" auth />,
       },
       {
         path: "login",
         element: <WrapperRouteComponent element={<Login />} titleId="Login" />,
       },
-      // {
-      //   path: "/login",
-      //   element: <WrapperRouteComponent element={<Login />} titleId="Login" />,
-      // },
-
-      // {
-      //   path: "*",
-      //   element: <WrapperRouteComponent element={<NotFoundPage />} titleId="Not Found" />,
-      // },
+      {
+        path: "register",
+        element: <WrapperRouteComponent element={<Register />} titleId="Register" />,
+      },
+      {
+        path: "*",
+        element: <WrapperRouteComponent element={<NotFound />} titleId="Not Found" />,
+      },
     ],
   },
 ];
