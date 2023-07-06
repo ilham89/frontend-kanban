@@ -1,4 +1,5 @@
 import { Box, Grid } from "@chakra-ui/react";
+import { DragDropContext } from "react-beautiful-dnd";
 
 import { useAction } from "./useAction";
 import Header from "@/components/header";
@@ -6,7 +7,7 @@ import Spinner from "@/components/spinner";
 import Todo from "@/components/todo";
 
 const Home = () => {
-  const { todos, isLoading, todoItemsQueries } = useAction();
+  const { todos, isLoading, todoItemsQueries, moveItemDraggable } = useAction();
 
   if (isLoading) return <Spinner />;
 
@@ -14,22 +15,28 @@ const Home = () => {
     <Box>
       <Header />
       <Box p={6}>
-        <Grid
-          templateColumns="repeat(auto-fit, minmax(300px, 1fr))"
-          justifyContent="center"
-          gap="4"
+        <DragDropContext
+          onDragEnd={(result) => {
+            moveItemDraggable(result);
+          }}
         >
-          {todos?.map((todo, index) => (
-            <Todo
-              key={todo.id}
-              id={todo.id}
-              title={todo.title}
-              description={todo.description}
-              items={todoItemsQueries[index].data || []}
-              todos={todos}
-            />
-          ))}
-        </Grid>
+          <Grid
+            templateColumns="repeat(auto-fit, minmax(300px, 1fr))"
+            justifyContent="center"
+            gap="4"
+          >
+            {todos?.map((todo, index) => (
+              <Todo
+                key={todo.id}
+                id={todo.id}
+                title={todo.title}
+                description={todo.description}
+                items={todoItemsQueries[index].data || []}
+                todos={todos}
+              />
+            ))}
+          </Grid>
+        </DragDropContext>
       </Box>
     </Box>
   );

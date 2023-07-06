@@ -19,6 +19,7 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
+import { Droppable } from "react-beautiful-dnd";
 
 import { ITodo } from "./todo.types";
 import { useAction } from "./useAction";
@@ -44,9 +45,22 @@ const Todo = ({ id, title, description, items, todos }: ITodo) => {
         <Text fontWeight="bold" fontSize="xs" color="#404040">
           {description}
         </Text>
-        {items?.map((item) => (
-          <Item key={item.id} item={item} todos={todos} />
-        ))}
+        <Droppable key={id} droppableId={id.toString()}>
+          {(provided) => (
+            <VStack
+              spacing="3"
+              align="flex-start"
+              width="full"
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+            >
+              {items?.map((item, index) => (
+                <Item key={item.id} item={item} todos={todos} index={index} />
+              ))}
+              {provided.placeholder}
+            </VStack>
+          )}
+        </Droppable>
         {items.length === 0 && (
           <Box
             py="2"
