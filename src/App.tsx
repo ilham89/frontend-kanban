@@ -1,35 +1,16 @@
 import * as React from "react";
 
-import { ChakraProvider, extendTheme } from "@chakra-ui/react";
+import { ChakraProvider } from "@chakra-ui/react";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { BrowserRouter } from "react-router-dom";
 
 import RenderRouter from "./router";
+import { theme } from "./themes";
 import Spinner from "@/components/spinner";
 import { queryClient } from "@/helpers/query-client";
 
 const App = () => {
-  const theme = extendTheme({
-    colors: {
-      primary: {
-        500: "#01959F",
-      },
-      text: {
-        500: "#1E1F21",
-      },
-      border: {
-        500: "#4DB5BC",
-      },
-      surface: {
-        500: "#F7FEFF",
-      },
-      success: {
-        500: "#43936C",
-      },
-    },
-  });
-
   return (
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
