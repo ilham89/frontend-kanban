@@ -1,7 +1,7 @@
 import { useMutation, useQueries } from "@tanstack/react-query";
 
 import { itemServices } from "./items.api";
-import { IParamsCreateItem, IParamsDeleteItem } from "./items.types";
+import { IParamsCreateItem, IParamsDeleteItem, IParamsUpdateItem } from "./items.types";
 import { ITodo } from "../todos/todos.types";
 import { queryClient } from "@/helpers/query-client";
 
@@ -29,3 +29,14 @@ export const useMutationCreateItem = () =>
       queryClient.invalidateQueries(["items", todoId]);
     },
   });
+
+export const useMutationUpdateItem = () =>
+  useMutation(
+    (params: IParamsUpdateItem) => itemServices.updateItem(params.todoId, params.id, params.item),
+    {
+      onSuccess: (_, { todoId, item }) => {
+        queryClient.invalidateQueries(["items", todoId]);
+        queryClient.invalidateQueries(["items", item.target_todo_id]);
+      },
+    },
+  );

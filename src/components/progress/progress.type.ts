@@ -1,3 +1,3 @@
 export interface IStyles {
-  readonly completed: number;
+  readonly completed: number | string;
 }

@@ -17,3 +17,9 @@ export interface IParamsCreateItem {
   todoId: number;
   todo: Pick<IItem, "name" | "progress_percentage">;
 }
+
+export interface IParamsUpdateItem {
+  todoId: number;
+  id: number;
+  item: Partial<Pick<IItem, "name" | "progress_percentage">> & { target_todo_id: number };
+}

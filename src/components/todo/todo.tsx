@@ -25,11 +25,18 @@ import { useAction } from "./useAction";
 import { AddIcon } from "../icons";
 import Item from "../item";
 
-const Todo = ({ title, description, items, id }: ITodo) => {
+const Todo = ({ id, title, description, items, todos }: ITodo) => {
   const { isOpen, onOpen, onClose, isLoading, formik } = useAction(id);
 
   return (
-    <Box border="1px solid" borderColor="primary.500" borderRadius="base" p="4" bg="surface.500">
+    <Box
+      border="1px solid"
+      borderColor="primary.500"
+      borderRadius="base"
+      p="4"
+      bg="surface.500"
+      h="fit-content"
+    >
       <VStack spacing="3" align="flex-start">
         <Tag variant="outline" colorScheme="border" bg="surface.500">
           {title}
@@ -38,7 +45,7 @@ const Todo = ({ title, description, items, id }: ITodo) => {
           {description}
         </Text>
         {items?.map((item) => (
-          <Item key={item.id} item={item} />
+          <Item key={item.id} item={item} todos={todos} />
         ))}
         {items.length === 0 && (
           <Box

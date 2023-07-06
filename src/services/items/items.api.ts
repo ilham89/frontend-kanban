@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 
-import { IItem } from "./items.types";
+import { IItem, IParamsUpdateItem } from "./items.types";
 import { axiosInstance } from "@/configs/axios";
 
 export const itemServices = {
@@ -22,6 +22,18 @@ export const itemServices = {
     const response = await axiosInstance({
       url: `/todos/${todoId}/items`,
       method: "post",
+      data,
+    });
+    return response.data;
+  },
+  updateItem: async (
+    todoId: number,
+    id: number,
+    data: Partial<Pick<IParamsUpdateItem, "item">> & { target_todo_id: number },
+  ) => {
+    const response = await axiosInstance({
+      url: `/todos/${todoId}/items/${id}`,
+      method: "patch",
       data,
     });
     return response.data;

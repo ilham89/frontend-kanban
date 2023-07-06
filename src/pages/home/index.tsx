@@ -26,6 +26,7 @@ const Home = () => {
               title={todo.title}
               description={todo.description}
               items={todoItemsQueries[index].data || []}
+              todos={todos}
             />
           ))}
         </Grid>
