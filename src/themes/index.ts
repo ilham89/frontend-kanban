@@ -17,5 +17,14 @@ export const theme = extendTheme({
     success: {
       500: "#43936C",
     },
+    secondary: {
+      500: "#FEEABC",
+    },
+    primaryDanger: {
+      500: "#F5B1B7",
+    },
+    primarySuccess: {
+      500: "#B8DBCA",
+    },
   },
 });

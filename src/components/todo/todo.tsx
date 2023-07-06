@@ -25,21 +25,29 @@ import { ITodo } from "./todo.types";
 import { useAction } from "./useAction";
 import { AddIcon } from "../icons";
 import Item from "../item";
+import { generateHexToText, generateRandomColorPair } from "@/helpers/color";
 
 const Todo = ({ id, title, description, items, todos }: ITodo) => {
   const { isOpen, onOpen, onClose, isLoading, formik } = useAction(id);
 
+  const { primaryColor, secondaryColor, fontColor } = generateRandomColorPair();
+
   return (
     <Box
       border="1px solid"
-      borderColor="primary.500"
+      borderColor={primaryColor}
       borderRadius="base"
       p="4"
-      bg="surface.500"
+      bg={secondaryColor}
       h="fit-content"
     >
       <VStack spacing="3" align="flex-start">
-        <Tag variant="outline" colorScheme="border" bg="surface.500">
+        <Tag
+          variant="outline"
+          color={fontColor}
+          colorScheme={generateHexToText(primaryColor)}
+          bg={secondaryColor}
+        >
           {title}
         </Tag>
         <Text fontWeight="bold" fontSize="xs" color="#404040">
