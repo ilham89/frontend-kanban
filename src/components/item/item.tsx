@@ -25,35 +25,29 @@ import {
   Stack,
   Text,
   VStack,
-  useDisclosure,
 } from "@chakra-ui/react";
-import { useFormik } from "formik";
 import { Draggable } from "react-beautiful-dnd";
 
+import { useAction } from "./useAction";
 import Hover from "../hover";
 import { DeleteIcon, DoneIcon, SettingIcon, UpdateIcon, WarningIcon } from "../icons";
 import Progress from "../progress";
-import { CreateItemSchema } from "@/schema/items";
-import { useMutationDeleteItem, useMutationUpdateItem } from "@/services/items/items.function";
 import { IItem } from "@/services/items/items.types";
 import { ITodo } from "@/services/todos/todos.types";
 
 const Item = ({ item, todos, index }: { item: IItem; todos: ITodo[]; index: number }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const { isOpen: openUpdate, onOpen: onOpenUpdate, onClose: onCloseUpdate } = useDisclosure();
-
-  const { mutate, isLoading } = useMutationDeleteItem();
-  const { mutate: updateItem } = useMutationUpdateItem();
-
-  const confirmDelete = () => {
-    const params = {
-      todoId: item.todo_id,
-      id: item.id,
-    };
-    mutate(params, {
-      onSuccess: () => onClose(),
-    });
-  };
+  const {
+    isOpen,
+    onOpen,
+    onClose,
+    onOpenUpdate,
+    onCloseUpdate,
+    openUpdate,
+    isLoading,
+    confirmDelete,
+    moveItem,
+    formik,
+  } = useAction(item, todos);
 
   const actions = [
     {
@@ -77,48 +71,6 @@ const Item = ({ item, todos, index }: { item: IItem; todos: ITodo[]; index: numb
       hover: <DeleteIcon color="#E11428" />,
     },
   ] as const;
-
-  const currentTodoPosition = todos.findIndex((todo) => todo.id === item.todo_id);
-
-  const moveItem = (position: "left" | "right") => {
-    const params = {
-      todoId: item.todo_id,
-      id: item.id,
-      item: {
-        target_todo_id:
-          todos[position === "left" ? currentTodoPosition - 1 : currentTodoPosition + 1].id,
-      },
-    };
-
-    updateItem(params);
-  };
-
-  const formik = useFormik({
-    initialValues: {
-      name: item.name,
-      progress_percentage: item.progress_percentage,
-    },
-    onSubmit: (values) => {
-      const params = {
-        todoId: item.todo_id,
-        id: item.id,
-        item: {
-          target_todo_id: item.todo_id,
-          ...values,
-        },
-      };
-      updateItem(params, {
-        onSuccess: () => {
-          // addSuccess("Successfully create item!");
-          onCloseUpdate();
-        },
-        onError: () => {
-          // addError("Something went wrong");
-        },
-      });
-    },
-    validationSchema: CreateItemSchema,
-  });
 
   return (
     <Draggable key={item.id} draggableId={item.id.toString()} index={index}>

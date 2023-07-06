@@ -5,14 +5,12 @@ const useNotification = () => {
   const addError = (label?: string) =>
     toast({
       title: label || "Something went wrong",
-      isClosable: true,
       status: "error",
     });
 
   const addSuccess = (label?: string) =>
     toast({
       title: label || "Success!",
-      isClosable: true,
       status: "success",
     });
 
