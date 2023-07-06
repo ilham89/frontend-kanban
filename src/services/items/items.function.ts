@@ -36,7 +36,9 @@ export const useMutationUpdateItem = () =>
     {
       onSuccess: (_, { todoId, item }) => {
         queryClient.invalidateQueries(["items", todoId]);
-        queryClient.invalidateQueries(["items", item.target_todo_id]);
+        if (Object.keys(item).length === 1) {
+          queryClient.invalidateQueries(["items", item.target_todo_id]);
+        }
       },
     },
   );

@@ -3,8 +3,14 @@ import {
   Box,
   Button,
   Divider,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
   HStack,
   IconButton,
+  Input,
+  InputGroup,
+  InputRightAddon,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -21,18 +27,22 @@ import {
   VStack,
   useDisclosure,
 } from "@chakra-ui/react";
+import { useFormik } from "formik";
 
 import Hover from "../hover";
 import { DeleteIcon, DoneIcon, SettingIcon, UpdateIcon, WarningIcon } from "../icons";
 import Progress from "../progress";
+import { CreateItemSchema } from "@/schema/items";
 import { useMutationDeleteItem, useMutationUpdateItem } from "@/services/items/items.function";
 import { IItem } from "@/services/items/items.types";
 import { ITodo } from "@/services/todos/todos.types";
 
 const Item = ({ item, todos }: { item: IItem; todos: ITodo[] }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen: openUpdate, onOpen: onOpenUpdate, onClose: onCloseUpdate } = useDisclosure();
+
   const { mutate, isLoading } = useMutationDeleteItem();
-  const { mutate: updateMoveItem } = useMutationUpdateItem();
+  const { mutate: updateItem } = useMutationUpdateItem();
 
   const confirmDelete = () => {
     const params = {
@@ -79,8 +89,35 @@ const Item = ({ item, todos }: { item: IItem; todos: ITodo[] }) => {
       },
     };
 
-    updateMoveItem(params);
+    updateItem(params);
   };
+
+  const formik = useFormik({
+    initialValues: {
+      name: item.name,
+      progress_percentage: item.progress_percentage,
+    },
+    onSubmit: (values) => {
+      const params = {
+        todoId: item.todo_id,
+        id: item.id,
+        item: {
+          target_todo_id: item.todo_id,
+          ...values,
+        },
+      };
+      updateItem(params, {
+        onSuccess: () => {
+          // addSuccess("Successfully create item!");
+          onCloseUpdate();
+        },
+        onError: () => {
+          // addError("Something went wrong");
+        },
+      });
+    },
+    validationSchema: CreateItemSchema,
+  });
 
   return (
     <Box p="4" border="1px solid #E0E0E0" bg="#FAFAFA" borderRadius="base" width="full">
@@ -121,6 +158,9 @@ const Item = ({ item, todos }: { item: IItem; todos: ITodo[] }) => {
                           {...(action.name === "Move Right" && {
                             onClick: () => moveItem("right"),
                           })}
+                          {...(action.name === "Edit" && {
+                            onClick: onOpenUpdate,
+                          })}
                         >
                           {action.hover}
                           <Text
@@ -149,6 +189,7 @@ const Item = ({ item, todos }: { item: IItem; todos: ITodo[] }) => {
         </HStack>
       </VStack>
 
+      {/* Modal Delete Item */}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
@@ -180,6 +221,67 @@ const Item = ({ item, todos }: { item: IItem; todos: ITodo[] }) => {
               Delete
             </Button>
           </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      {/* Modal Update Item */}
+      <Modal isOpen={openUpdate} onClose={onCloseUpdate}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Edit Task</ModalHeader>
+          <ModalCloseButton />
+          <form onSubmit={formik.handleSubmit}>
+            <ModalBody>
+              <VStack spacing="4" align="start">
+                <FormControl isInvalid={!!formik.errors.name}>
+                  <FormLabel>Task Name</FormLabel>
+                  <Input
+                    name="name"
+                    placeholder="Type your Task"
+                    focusBorderColor="primary.500"
+                    borderRadius="lg"
+                    border="2px solid"
+                    borderColor="#E0E0E0"
+                    onChange={formik.handleChange}
+                    value={formik.values.name}
+                  />
+                  <FormErrorMessage>{formik.errors.name}</FormErrorMessage>
+                </FormControl>
+                <FormControl isInvalid={!!formik.errors.progress_percentage}>
+                  <FormLabel>Progress</FormLabel>
+                  <InputGroup>
+                    <Input
+                      name="progress_percentage"
+                      placeholder="70"
+                      focusBorderColor="primary.500"
+                      borderRadius="lg"
+                      border="2px solid"
+                      borderColor="#E0E0E0"
+                      type="number"
+                      w="25"
+                      onChange={formik.handleChange}
+                      value={formik.values.progress_percentage || ""}
+                    />
+                    <InputRightAddon>%</InputRightAddon>
+                  </InputGroup>
+                  <FormErrorMessage>{formik.errors.progress_percentage}</FormErrorMessage>
+                </FormControl>
+              </VStack>
+            </ModalBody>
+            <ModalFooter>
+              <Button variant="ghost" mr={3} onClick={onCloseUpdate}>
+                Cancel
+              </Button>
+              <Button
+                colorScheme="primary"
+                type="submit"
+                loadingText="Loading..."
+                isLoading={isLoading}
+              >
+                Save Task
+              </Button>
+            </ModalFooter>
+          </form>
         </ModalContent>
       </Modal>
     </Box>
