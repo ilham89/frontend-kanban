@@ -11,4 +11,12 @@ export const todoServices = {
     });
     return response.data;
   },
+  createTodo: async (data: Pick<ITodo, "title" | "description">): Promise<ITodo> => {
+    const response = await axiosInstance({
+      url: "/todos",
+      method: "post",
+      data,
+    });
+    return response.data;
+  },
 };
