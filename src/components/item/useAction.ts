@@ -30,6 +30,9 @@ export const useAction = (item: IItem, todos: ITodo[]) => {
   const moveItem = (position: "left" | "right") => {
     const targetTodo =
       todos[position === "left" ? currentTodoPosition - 1 : currentTodoPosition + 1];
+
+    if (!targetTodo) return;
+
     const params = {
       todoId: item.todo_id,
       id: item.id,
