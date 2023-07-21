@@ -16,9 +16,7 @@ const Home = () => {
       <Header />
       <Box p={6}>
         <DragDropContext
-          onDragEnd={(result, provided) => {
-            console.log(result, provided, "ini apa");
-
+          onDragEnd={(result) => {
             moveItemDraggable(result);
           }}
         >
